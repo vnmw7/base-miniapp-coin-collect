@@ -2,6 +2,8 @@
 
 import { Card } from "./Card";
 import dynamic from 'next/dynamic';
+import { useState } from "react";
+import { Button } from "./Button";
 
 const MiniMap = dynamic(() => import('./MiniMap').then(mod => mod.MiniMap), {
   ssr: false,
@@ -14,16 +16,33 @@ type HomeProps = {
 };
 
 export function Home({  }: HomeProps) {
+  const [pins, setPins] = useState<[number, number][]>([]);
+
+  const generateRandomPins = () => {
+    navigator.geolocation.getCurrentPosition((pos) => {
+      const { latitude, longitude } = pos.coords;
+      const newPins: [number, number][] = [];
+      for (let i = 0; i < 5; i++) {
+        //- 1km is approx 0.009 degrees of latitude
+        //- 5km is approx 0.045 degrees of latitude
+        const randomLat = latitude + (Math.random() * 0.036 + 0.009) * (Math.random() < 0.5 ? -1 : 1);
+        const randomLng = longitude + (Math.random() * 0.036 + 0.009) * (Math.random() < 0.5 ? -1 : 1);
+        newPins.push([randomLat, randomLng]);
+      }
+      setPins(newPins);
+    });
+  };
+
   return (
     <div className="space-y-6 animate-fade-in">
-      <Card title="My First Mini App">
+      <Card title="Coin Collector">
         <p className="text-[var(--app-foreground-muted)] mb-4">
           This is a minimalistic Mini App built with OnchainKit components.
         </p>
       </Card>
 
-      <MiniMap />
-
+      <MiniMap pins={pins} />
+      <Button onClick={generateRandomPins}>Generate Pins</Button>
       <TransactionCard />
     </div>
   );

@@ -70,7 +70,7 @@ export function TransactionCard() {
                 console.error("Transaction failed:", error)
               }
             >
-              <TransactionButton className="text-white text-md" />
+              <TransactionButton className="text-white text-md" text="Collect Coin" />
               <TransactionStatus>
                 <TransactionStatusAction />
                 <TransactionStatusLabel />
