@@ -1,7 +1,12 @@
 "use client";
 
 import { Card } from "./Card";
-import { MiniMap } from "./MiniMap";
+import dynamic from 'next/dynamic';
+
+const MiniMap = dynamic(() => import('./MiniMap').then(mod => mod.MiniMap), {
+  ssr: false,
+  loading: () => <p>Loading map...</p>,
+});
 import { TransactionCard } from "./TransactionCard";
 
 type HomeProps = {

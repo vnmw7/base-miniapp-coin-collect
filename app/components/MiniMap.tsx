@@ -1,6 +1,6 @@
 "use client";
 
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import { MapContainer, TileLayer } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 
@@ -17,12 +17,14 @@ L.Icon.Default.mergeOptions({
 });
 
 export function MiniMap() {
-  const position: [number, number] = [51.505, -0.09]; // Default position
+  const position: [number, number] = [0, 0]; // Default position
 
   return (
     <MapContainer
       center={position}
-      zoom={13}
+      zoom={5}
+      minZoom={5}
+      maxZoom={19}
       scrollWheelZoom={false}
       style={{ height: "250px", width: "100%", marginTop: '20px', borderRadius: '12px' }}
     >
@@ -30,11 +32,6 @@ export function MiniMap() {
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      <Marker position={position}>
-        <Popup>
-          A pretty CSS3 popup. <br /> Easily customizable.
-        </Popup>
-      </Marker>
     </MapContainer>
   );
 }
