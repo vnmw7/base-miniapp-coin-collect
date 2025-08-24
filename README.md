@@ -1,0 +1,1 @@
+# base-miniapp-coin-collect
