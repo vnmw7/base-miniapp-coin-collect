@@ -17,6 +17,20 @@ L.Icon.Default.mergeOptions({
     "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png",
 });
 
+const coinIcon = new L.Icon({
+  iconUrl:
+    "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIiB3aWR0aD0iMzIiIGhlaWdodD0iMzIiPgogIDxjaXJjbGUgY3g9IjUwIiBjeT0iNTAiIHI9IjQ1IiBmaWxsPSIjRkZENTAwIiBzdHJva2U9IiNEQUE1MjAiIHN0cm9rZS13aWR0aD0iNSIvPgogIDx0ZXh0IHg9IjUwIiB5PSI2NSIgZm9udC1zaXplPSI1MCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iI0RBQTUyMCI+JDwvdGV4dD4KPC9zdmc+",
+  iconSize: [32, 32],
+  iconAnchor: [16, 32],
+  popupAnchor: [0, -32],
+});
+
+type Pin = {
+  lat: number;
+  lng: number;
+  icon: string;
+};
+
 function LocationMarker() {
   const [position, setPosition] = useState<[number, number] | null>(null);
   const map = useMap();
@@ -58,7 +72,7 @@ function LocationMarker() {
   );
 }
 
-export function MiniMap({ pins = [] }: { pins?: [number, number][] }) {
+export function MiniMap({ pins = [] }: { pins?: Pin[] }) {
   const position: [number, number] = [0, 0]; // Default position
 
   return (
@@ -76,7 +90,11 @@ export function MiniMap({ pins = [] }: { pins?: [number, number][] }) {
       />
       <LocationMarker />
       {pins.map((pin, index) => (
-        <Marker key={index} position={pin}></Marker>
+        <Marker
+          key={index}
+          position={[pin.lat, pin.lng]}
+          icon={coinIcon}
+        ></Marker>
       ))}
     </MapContainer>
   );

@@ -16,20 +16,20 @@ type HomeProps = {
 };
 
 export function Home({  }: HomeProps) {
-  const [pins, setPins] = useState<[number, number][]>([]);
+const [pins, setPins] = useState<{ lat: number; lng: number; icon: string }[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
   const generateRandomPins = () => {
     setIsLoading(true);
     navigator.geolocation.getCurrentPosition((pos) => {
       const { latitude, longitude } = pos.coords;
-      const newPins: [number, number][] = [];
+      const newPins: { lat: number; lng: number; icon: string }[] = [];
       for (let i = 0; i < 5; i++) {
         //- 1km is approx 0.009 degrees of latitude
         //- 5km is approx 0.045 degrees of latitude
         const randomLat = latitude + (Math.random() * 0.018 + 0.009) * (Math.random() < 0.5 ? -1 : 1);
         const randomLng = longitude + (Math.random() * 0.018 + 0.009) * (Math.random() < 0.5 ? -1 : 1);
-        newPins.push([randomLat, randomLng]);
+        newPins.push({ lat: randomLat, lng: randomLng, icon: "coin icon" });
       }
       setPins(newPins);
       setIsLoading(false);
@@ -46,7 +46,7 @@ export function Home({  }: HomeProps) {
 
       <MiniMap pins={pins} />
       <Button onClick={generateRandomPins} disabled={isLoading}>
-        {isLoading ? "Generating..." : "Generate Pins"}
+        {isLoading ? "Generating..." : "Generate Coins"}
       </Button>
       <TransactionCard />
     </div>
