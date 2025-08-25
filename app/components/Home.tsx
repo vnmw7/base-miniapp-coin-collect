@@ -4,6 +4,7 @@ import { Card } from "./Card";
 import dynamic from 'next/dynamic';
 import { useState } from "react";
 import { Button } from "./Button";
+import { useAccount } from 'wagmi';
 
 const MiniMap = dynamic(() => import('./MiniMap').then(mod => mod.MiniMap), {
   ssr: false,
@@ -36,6 +37,8 @@ export function Home({  }: HomeProps) {
     });
   };
 
+  const { isConnected } = useAccount();
+
   return (
     <div className="space-y-6 animate-fade-in" style={{ marginTop: "8px" }}>
       <Card title="Coin Collector">
@@ -47,13 +50,18 @@ export function Home({  }: HomeProps) {
         </ul>
       </Card>
 
-      <MiniMap pins={pins} />
-      <hr style={{ borderColor: "black", marginTop: "8px" }} />
-      <Button onClick={generateRandomPins} disabled={isLoading} className="w-full">
-        {isLoading ? "Generating..." : "Generate Coins"}
-      </Button>
-      <hr style={{ borderColor: "black", marginBottom: "8px" }} />
-      <TransactionCard pins={pins} />
+      {isConnected && (
+        <>
+          <MiniMap pins={pins} />
+          <hr style={{ borderColor: "black", marginTop: "8px" }} />
+          <Button onClick={generateRandomPins} disabled={isLoading} className="w-full">
+            {isLoading ? "Generating..." : "Generate Coins"}
+          </Button>
+          <hr style={{ borderColor: "black", marginBottom: "8px" }} />
+          <TransactionCard pins={pins} />
+        </>
+      )}
+
     </div>
   );
 }
