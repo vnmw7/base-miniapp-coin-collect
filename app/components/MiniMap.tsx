@@ -6,7 +6,13 @@ import L from "leaflet";
 import { useState, useEffect } from "react";
 
 // Fix for default icon issue with webpack
-delete (L.Icon.Default.prototype as any)._getIconUrl;
+// Extend the prototype type to include optional _getIconUrl so we avoid using `any`.
+interface IconDefaultPrototype {
+  _getIconUrl?: unknown;
+}
+
+const iconDefaultProto = L.Icon.Default.prototype as IconDefaultPrototype;
+delete iconDefaultProto._getIconUrl;
 
 L.Icon.Default.mergeOptions({
   iconRetinaUrl:
