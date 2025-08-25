@@ -47,7 +47,12 @@ function LocationMarker() {
         const { latitude, longitude } = pos.coords;
         const newPosition: [number, number] = [latitude, longitude];
         setPosition(newPosition);
-        map.flyTo(newPosition, 13);
+        // Keep existing behavior: fly to position when a watched update arrives
+        try {
+          map.flyTo(newPosition, 13);
+        } catch {
+          // ignore map errors
+        }
       },
       () => {
         // Handle error or permission denied
@@ -59,13 +64,23 @@ function LocationMarker() {
       }
     );
 
+    // Also poll the user's position every 1 second and recenter the map
     const intervalId = setInterval(() => {
       navigator.geolocation.getCurrentPosition((pos) => {
         const { latitude, longitude } = pos.coords;
         const newPosition: [number, number] = [latitude, longitude];
         setPosition(newPosition);
+        // Recenter the map to the user's current location with a reasonable zoom
+        try {
+          // Use setView for immediate centering without animated flying, which is less jarring when repeated frequently
+          map.setView(newPosition, Math.max(map.getZoom(), 15));
+        } catch {
+          // ignore map errors
+        }
+      }, () => {
+        // ignore getCurrentPosition errors here
       });
-    }, 3000);
+    }, 1000);
 
     return () => {
       navigator.geolocation.clearWatch(watchId);

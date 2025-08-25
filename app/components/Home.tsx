@@ -19,9 +19,11 @@ type HomeProps = {
 export function Home({  }: HomeProps) {
   const [pins, setPins] = useState<{ lat: number; lng: number; icon: string }[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [locationError, setLocationError] = useState(false);
 
   const generateRandomPins = () => {
     setIsLoading(true);
+    setLocationError(false);
     navigator.geolocation.getCurrentPosition((pos) => {
       const { latitude, longitude } = pos.coords;
       const newPins: { lat: number; lng: number; icon: string }[] = [];
@@ -34,6 +36,9 @@ export function Home({  }: HomeProps) {
       }
       setPins(newPins);
       setIsLoading(false);
+    }, () => {
+      setLocationError(true);
+      setIsLoading(false);
     });
   };
 
@@ -45,6 +50,7 @@ export function Home({  }: HomeProps) {
         <p>This is a minimalistic Mini App built with OnchainKit components.</p>
         <ul className="text-[var(--app-foreground-muted)] mb-4 list-disc pl-5 space-y-1 marker:text-[var(--app-foreground-muted)] px-4">
           <li>Connect your wallet first.</li>
+          <li>Enable location.</li>
           <li>Click &quot;Generate Coins&quot; to create random coin locations.</li>
           <li>You need to be near the coins to collect them.</li>
         </ul>
@@ -52,13 +58,24 @@ export function Home({  }: HomeProps) {
 
       {isConnected && (
         <>
-          <MiniMap pins={pins} />
-          <hr style={{ borderColor: "black", marginTop: "8px" }} />
-          <Button onClick={generateRandomPins} disabled={isLoading} className="w-full">
-            {isLoading ? "Generating..." : "Generate Coins"}
-          </Button>
-          <hr style={{ borderColor: "black", marginBottom: "8px" }} />
-          <TransactionCard pins={pins} />
+          {locationError ? (
+            <>
+              <p className="text-red-500">Please allow location access to collect coins</p>
+              <Button onClick={generateRandomPins} disabled={isLoading} className="w-full mt-2">
+                {isLoading ? "Trying again..." : "Try Again"}
+              </Button>
+            </>
+          ) : (
+            <>
+              <MiniMap pins={pins} />
+              <hr style={{ borderColor: "black", marginTop: "8px" }} />
+            <Button onClick={generateRandomPins} disabled={isLoading} className="w-full">
+              {isLoading ? "Generating..." : "Generate Coins"}
+            </Button>
+              <hr style={{ borderColor: "black", marginBottom: "8px" }} />
+              <TransactionCard pins={pins} />
+            </>
+          )}
         </>
       )}
 
