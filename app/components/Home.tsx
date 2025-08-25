@@ -37,19 +37,22 @@ export function Home({  }: HomeProps) {
   };
 
   return (
-    <div className="space-y-6 animate-fade-in">
+    <div className="space-y-6 animate-fade-in" style={{ marginTop: "8px" }}>
       <Card title="Coin Collector">
         <p>This is a minimalistic Mini App built with OnchainKit components.</p>
-        <ul className="text-[var(--app-foreground-muted)] mb-4 list-disc pl-5 space-y-1">
+        <ul className="text-[var(--app-foreground-muted)] mb-4 list-disc pl-5 space-y-1 marker:text-[var(--app-foreground-muted)] px-4">
+          <li>Connect your wallet first.</li>
           <li>Click &quot;Generate Coins&quot; to create random coin locations.</li>
           <li>You need to be near the coins to collect them.</li>
         </ul>
       </Card>
 
       <MiniMap pins={pins} />
+      <hr style={{ borderColor: "black", marginTop: "8px" }} />
       <Button onClick={generateRandomPins} disabled={isLoading} className="w-full">
         {isLoading ? "Generating..." : "Generate Coins"}
       </Button>
+      <hr style={{ borderColor: "black", marginBottom: "8px" }} />
       <TransactionCard pins={pins} />
     </div>
   );

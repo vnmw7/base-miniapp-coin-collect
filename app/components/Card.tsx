@@ -29,6 +29,7 @@ export function Card({
       onKeyDown={onClick ? handleKeyDown : undefined}
       tabIndex={onClick ? 0 : undefined}
       role={onClick ? "button" : undefined}
+      style={{ padding: "16px" }  }
     >
       {title && (
         <div className="px-5 py-3 border-b border-[var(--app-card-border)]">
