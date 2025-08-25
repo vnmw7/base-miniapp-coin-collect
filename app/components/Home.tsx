@@ -45,7 +45,7 @@ const [pins, setPins] = useState<{ lat: number; lng: number; icon: string }[]>([
       </Card>
 
       <MiniMap pins={pins} />
-      <Button onClick={generateRandomPins} disabled={isLoading}>
+      <Button onClick={generateRandomPins} disabled={isLoading} className="w-full">
         {isLoading ? "Generating..." : "Generate Coins"}
       </Button>
       <TransactionCard />
