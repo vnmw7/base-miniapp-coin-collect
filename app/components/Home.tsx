@@ -69,6 +69,10 @@ export function Home({  }: HomeProps) {
     return () => clearTimeout(timeout);
   }, []);
 
+  const reloadWindow = () => {
+    window.location.reload();
+  };
+
   const { isConnected } = useAccount();
 
   return (
@@ -88,7 +92,7 @@ export function Home({  }: HomeProps) {
           {locationError ? (
             <>
               <p className="text-red-500">Please allow location access to collect coins</p>
-              <Button onClick={generateRandomPins} disabled={isLoading} className="w-full mt-2">
+              <Button onClick={reloadWindow} disabled={isLoading} className="w-full mt-2">
                 {isLoading ? "Trying again..." : "Try Again"}
               </Button>
             </>
