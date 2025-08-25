@@ -1,6 +1,6 @@
 "use client";
 
-import { MapContainer, TileLayer, Marker, useMap } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, useMap, Circle } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import { useState, useEffect } from "react";
@@ -90,11 +90,19 @@ export function MiniMap({ pins = [] }: { pins?: Pin[] }) {
       />
       <LocationMarker />
       {pins.map((pin, index) => (
-        <Marker
-          key={index}
-          position={[pin.lat, pin.lng]}
-          icon={coinIcon}
-        ></Marker>
+        <>
+          <Marker
+            key={index}
+            position={[pin.lat, pin.lng]}
+            icon={coinIcon}
+          ></Marker>
+          <Circle
+            key={`${index}-radius`}
+            center={[pin.lat, pin.lng]}
+            radius={2000} // 2km in meters
+            pathOptions={{ color: "white", fillColor: "white", fillOpacity: 0.5 }}
+          />
+        </>
       ))}
     </MapContainer>
   );
