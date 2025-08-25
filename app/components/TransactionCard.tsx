@@ -79,7 +79,7 @@ export function TransactionCard({ pins = [] }: { pins?: Pin[] }) {
         pin.lat,
         pin.lng
       );
-      return distance <= 2000; // 2km radius
+      return distance <= 1000; // 1km radius
     });
     setIsWithinRange(isClose);
   }, [userLocation, pins]);

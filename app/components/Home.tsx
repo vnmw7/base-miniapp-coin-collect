@@ -2,7 +2,7 @@
 
 import { Card } from "./Card";
 import dynamic from 'next/dynamic';
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "./Button";
 import { useAccount } from 'wagmi';
 
@@ -42,6 +42,33 @@ export function Home({  }: HomeProps) {
     });
   };
 
+  // Request initial geolocation on mount. If we can't fetch coordinates, mark location error.
+  useEffect(() => {
+    let didSet = false;
+    if (!('geolocation' in navigator)) {
+      setLocationError(true);
+      return;
+    }
+
+    const timeout = setTimeout(() => {
+      if (!didSet) setLocationError(true);
+    }, 5000); // 5s timeout to consider location unavailable
+
+    navigator.geolocation.getCurrentPosition(
+      () => {
+        didSet = true;
+        setLocationError(false);
+      },
+      () => {
+        didSet = true;
+        setLocationError(true);
+      },
+      { enableHighAccuracy: true, timeout: 5000 }
+    );
+
+    return () => clearTimeout(timeout);
+  }, []);
+
   const { isConnected } = useAccount();
 
   return (
@@ -69,9 +96,9 @@ export function Home({  }: HomeProps) {
             <>
               <MiniMap pins={pins} />
               <hr style={{ borderColor: "black", marginTop: "8px" }} />
-            <Button onClick={generateRandomPins} disabled={isLoading} className="w-full">
-              {isLoading ? "Generating..." : "Generate Coins"}
-            </Button>
+              <Button onClick={generateRandomPins} disabled={isLoading} className="w-full">
+                {isLoading ? "Generating..." : "Generate Coins"}
+              </Button>
               <hr style={{ borderColor: "black", marginBottom: "8px" }} />
               <TransactionCard pins={pins} />
             </>
