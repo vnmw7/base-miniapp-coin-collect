@@ -99,7 +99,7 @@ export function MiniMap({ pins = [] }: { pins?: Pin[] }) {
           <Circle
             key={`${index}-radius`}
             center={[pin.lat, pin.lng]}
-            radius={2000} // 2km in meters
+            radius={1000} // 2km in meters
             pathOptions={{ color: "white", fillColor: "white", fillOpacity: 0.5 }}
           />
         </>
