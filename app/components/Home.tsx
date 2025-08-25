@@ -25,8 +25,8 @@ export function Home({  }: HomeProps) {
       for (let i = 0; i < 5; i++) {
         //- 1km is approx 0.009 degrees of latitude
         //- 5km is approx 0.045 degrees of latitude
-        const randomLat = latitude + (Math.random() * 0.036 + 0.009) * (Math.random() < 0.5 ? -1 : 1);
-        const randomLng = longitude + (Math.random() * 0.036 + 0.009) * (Math.random() < 0.5 ? -1 : 1);
+        const randomLat = latitude + (Math.random() * 0.018 + 0.009) * (Math.random() < 0.5 ? -1 : 1);
+        const randomLng = longitude + (Math.random() * 0.018 + 0.009) * (Math.random() < 0.5 ? -1 : 1);
         newPins.push([randomLat, randomLng]);
       }
       setPins(newPins);
